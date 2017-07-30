@@ -12,7 +12,7 @@
                 <div v-if="trainer">
                     <h6>{{trainer.name}} </h6>
                     <!--<a v-bind:href="source.url" class="btn btn-primary" target="_blank">Go To {{source.name}} Website</a>
-                                                                                                                    Will be useful to direct to pages-->
+                                                                                                                        Will be useful to direct to pages-->
                 </div>
             </div>
         </div>

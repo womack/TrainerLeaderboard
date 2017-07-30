@@ -19,7 +19,7 @@
 <script>
 export default {
     name: "trainerdata",
-    props: ['trainer'],
+    props: ["trainer"],
     data() {
         return {
             feedback: []
@@ -47,7 +47,7 @@ export default {
 
 <style scoped>
 .media-object {
-    width: 128px;
+    width: 1280px;
     padding: 10px;
 }
 
