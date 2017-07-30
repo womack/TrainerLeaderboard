@@ -7,12 +7,12 @@
                 <h4> Select trainer</h4>
                 <select class="form-control" v-on:change="trainerChanged">
                     <option value=""> Please select trainer </option>
-                    <option v-for="trainer in trainers" v-bind:value="trainer.name">{{trainer.name}}</option>
+                    <option v-bind:value="trainer.name" v-for="trainer in trainers">{{trainer.name}}</option>
                 </select>
                 <div v-if="trainer">
                     <h6>{{trainer.name}} </h6>
                     <!--<a v-bind:href="source.url" class="btn btn-primary" target="_blank">Go To {{source.name}} Website</a>
-                                                Will be useful to direct to pages-->
+                                                                                                                    Will be useful to direct to pages-->
                 </div>
             </div>
         </div>
@@ -21,8 +21,8 @@
 
 <script>
 export default {
-    name: "trainerSelection",
-    date() {
+    name: "trainerelection",
+    data() {
         return {
             trainers: [],
             trainer: ""

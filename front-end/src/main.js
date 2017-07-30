@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import App from './App'
 import VueResource from 'vue-resource';
+import App from './App'
 
 
 Vue.use(VueResource);

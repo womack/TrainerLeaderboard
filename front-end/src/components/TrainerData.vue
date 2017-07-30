@@ -18,7 +18,7 @@
 
 <script>
 export default {
-    name: "trainerData",
+    name: "trainerdata",
     props: ['trainer'],
     data() {
         return {
@@ -29,8 +29,8 @@ export default {
         updateTrainer: function (trainer) {
             this.$http.get("http://192.168.0.23:3000/api/trainers?name=" + trainer)
                 .then((response) => {
-                    this.feedback = response.data.feedback;
-                }).catch((err) => console.log(err));
+                    this.feedback = response.data[0].feedback;
+                });
         }
     },
     created: function () {
