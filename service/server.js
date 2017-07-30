@@ -8,7 +8,7 @@ let logger = require("logops");
 
 //MongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://127.0.0.1/leaderboardDB", { useMongoClient: true });
+mongoose.connect("mongodb://192.168.0.10/leaderboardDB", { useMongoClient: true });
 
 //Express
 let app = express();
