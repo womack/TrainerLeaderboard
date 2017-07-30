@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+  <div class="container" id="app">
+    <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
+    <TrainerData v-bind:trainer="trainer"></TrainerData>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+
+import TrainerSelection from "./components/TrainerSelection";
+import TrainerData from "./components/TrainerData";
+
 
 export default {
   name: 'app',
   components: {
-    Hello
+    TrainerSelection,
+    TrainerData
+  },
+  data() {
+    return {
+      trainer: ""
+    }
+  },
+  methods: {
+    trainerChanged: function (trainer) {
+      this.trainer = trainer;
+    }
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  padding-top: 20px
 }
 </style>
