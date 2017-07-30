@@ -8,5 +8,5 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-/leaderboard/node_modules
+/front-end/node_modules
 /service/node_modules
