@@ -27,10 +27,10 @@ export default {
     },
     methods: {
         updateTrainer: function (trainer) {
-            this.$http.get("localhost:3000/api/trainers?name=" + trainer)
+            this.$http.get("http://192.168.0.23:3000/api/trainers?name=" + trainer)
                 .then((response) => {
                     this.feedback = response.data.feedback;
-                });
+                }).catch((err) => console.log(err));
         }
     },
     created: function () {
