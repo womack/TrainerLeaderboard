@@ -4,8 +4,9 @@
             <div class="Chart__list">
                 <div class="Chart">
                     <h2>Linechart</h2>
-                    <line-chart :data="dummyData" :label="labelz">
-                    </line-chart>
+                    <chart :chart-data="datacollection" :label="labels">
+                    </chart>
+                    <button @click="fillData()">Randomize</button>
                 </div>
             </div>
         </div>
@@ -14,37 +15,53 @@
 
 <script>
 
-import LineChart from "./Chart";
+import Chart from "./Chart";
+import logic from "../logic/TrainerLogic"
 
 export default {
     components: {
-        LineChart
+        Chart
     },
     data() {
         return {
-            dummyData: [{
-                label: 'Data One',
-                backgroundColor: '#FC2525',
-                data: [40, 39, 10, 40, 39, 80, 40]
-            },
-            {
-                label: 'Data Two',
-                backgroundColor: '#05CBE1',
-                data: [60, 55, 32, 10, 2, 12, 53]
-            }],
-            labelz: ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+            datacollection: null
         }
     },
     trainers: [],
     methods: {
-        loadTrainers: function () {
+        fillData() {
+            this.datacollection = {
+                labels: logic.getGraphLabels(this.trainers),
+                datasets: [
+                    {
+                        label: 'TQI',
+                        backgroundColor: '#f87979',
+                        data: logic.getData(this.trainers, "tqi")
+                    }, {
+                        label: 'Average Knowledge Score',
+                        backgroundColor: '#f87979',
+                        data: logic.getAverageScore(this.trainers, "kScore")
+                    },
+                    {
+                        label: 'Average Reccomendation Score',
+                        backgroundColor: '#f87979',
+                        data: logic.getAverageScore(this.trainers, "rScore")
+                    }
+                ]
+            }
+        },
+        getRandomInt() {
+            return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+        },
+        loadTrainers() {
             this.$http.get("http://192.168.0.23:3000/api/trainers")
                 .then((response) => {
                     this.trainers = response.data;
+                    this.fillData();
                 });
         }
     },
-    created: function () {
+    created() {
         this.loadTrainers();
     }
 };

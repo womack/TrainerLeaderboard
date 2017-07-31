@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import logic from "../logic/TrainerLogic"
+let jsonObj = {};
 export default {
     name: "trainerdata",
     props: ["trainer"],
@@ -26,10 +28,11 @@ export default {
         }
     },
     methods: {
+        getFeedback: logic.getFeedback,
         updateTrainer: function (trainer) {
             this.$http.get("http://192.168.0.23:3000/api/trainers?name=" + trainer)
                 .then((response) => {
-                    this.feedback = response.data[0].feedback;
+                    this.feedback = this.getFeedback(response.data);
                 });
         }
     },

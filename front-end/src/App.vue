@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <!--     <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
-                                  <TrainerData v-bind:trainer="trainer"></TrainerData>-->
     <div class="container">
       <LeaderBoard></LeaderBoard>
+      <!-- <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
+        <TrainerData v-bind:trainer="trainer"></TrainerData> -->
   
     </div>
   </div>
