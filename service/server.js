@@ -8,7 +8,7 @@ let cors = require("cors");
 
 //MongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://192.168.0.10/leaderboardDB", { useMongoClient: true });
+mongoose.connect("mongodb://localhost/leaderboardDB", { useMongoClient: true });
 
 //Express
 let app = express();

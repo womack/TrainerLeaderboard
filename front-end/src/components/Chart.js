@@ -1,11 +1,9 @@
-import { Line } from 'vue-chartjs'
-export default Line.extend({
-    props: ["data", "label"],
+import { Bar, mixins } from 'vue-chartjs'
+const { reactiveProp } = mixins;
+export default Bar.extend({
+    mixins: [reactiveProp],
     mounted() {
-        this.renderChart({
-            labels: this.label,
-            datasets: this.data
-        }, { responsive: true, maintainAspectRatio: false })
+        this.renderChart(this.chartData, { responsive: true, maintainAspectRatio: false })
     }
 })
 
