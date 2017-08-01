@@ -3,10 +3,22 @@
         <div class="container">
             <div class="Chart__list">
                 <div class="Chart">
-                    <h2>Linechart</h2>
+                    <h2>Leaderboard</h2>
                     <chart :chart-data="datacollection" :label="labels">
                     </chart>
-                    <button @click="fillData()">Randomize</button>
+    
+                </div>
+                <div class="date">
+                    <select v-model="monthSelected" v-on:change="fillData()">
+                        <option v-for="month in months" v-bind:value="month.value">
+                            {{month.text}}
+                        </option>
+                    </select>
+                    <select v-model="yearSelected" v-on:change="fillData()">
+                        <option v-for="year in years" v-bind:value="year">
+                            {{year}}
+                        </option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -14,7 +26,6 @@
 </template>
 
 <script>
-
 import Chart from "./Chart";
 import logic from "../logic/TrainerLogic"
 
@@ -24,10 +35,27 @@ export default {
     },
     data() {
         return {
-            datacollection: null
+            datacollection: null,
+            monthSelected: new Date().getMonth(), //this would be genereated on current date
+            yearSelected: new Date().getFullYear(),
+            months: [
+                { text: "January", value: 0 },
+                { text: "Febuary", value: 1 },
+                { text: "March", value: 2 },
+                { text: "April", value: 3 },
+                { text: "May", value: 4 },
+                { text: "June", value: 5 },
+                { text: "July", value: 6 },
+                { text: "August", value: 7 },
+                { text: "September", value: 8 },
+                { text: "October", value: 9 },
+                { text: "November", value: 10 },
+                { text: "December", value: 11 }],
+            years: [2017, 2018, 2019, 2020, 2021, 2022],
+            labels: [],
+            trainers: [],
         }
     },
-    trainers: [],
     methods: {
         fillData() {
             this.datacollection = {
@@ -36,22 +64,19 @@ export default {
                     {
                         label: 'TQI',
                         backgroundColor: '#f87979',
-                        data: logic.getData(this.trainers, "tqi")
+                        data: logic.getData(this.trainers, "tqi", this.getSelectedDate())
                     }, {
                         label: 'Average Knowledge Score',
                         backgroundColor: '#f87979',
-                        data: logic.getAverageScore(this.trainers, "kScore")
+                        data: logic.getAverageScore(this.trainers, "kScore", this.getSelectedDate())
                     },
                     {
                         label: 'Average Reccomendation Score',
                         backgroundColor: '#f87979',
-                        data: logic.getAverageScore(this.trainers, "rScore")
+                        data: logic.getAverageScore(this.trainers, "rScore", this.getSelectedDate())
                     }
                 ]
             }
-        },
-        getRandomInt() {
-            return Math.floor(Math.random() * (50 - 5 + 1)) + 5
         },
         loadTrainers() {
             this.$http.get("http://192.168.0.23:3000/api/trainers")
@@ -59,6 +84,9 @@ export default {
                     this.trainers = response.data;
                     this.fillData();
                 });
+        },
+        getSelectedDate() {
+            return `${this.monthSelected}/${this.yearSelected}`;
         }
     },
     created() {
