@@ -23,7 +23,12 @@ app.use(expressLogging(logger));
 
 //Routes
 app.use("/api", require("./routes/api"));
-app.use("/addWeek", require("./routes/addWeek").addWeek)
+app.put("/addWeek", (req, res, error) => {
+    mongoose.findOneAndUpdate({ name: req.name }, { $push: { feedback: req.feedback } });
+    if (error) {
+        return res.send("error", error);
+    }
+});
 
 //Starting Server
 app.listen(port);
