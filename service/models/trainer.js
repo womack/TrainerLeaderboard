@@ -5,7 +5,7 @@ let mongoose = restful.mongoose;
 //Schema
 let trainerSchema = new mongoose.Schema({
     name: String,
-    feedback: {
+    feedback: [{
         title: String,
         date: String,
         traineeCount: Number,
@@ -14,7 +14,7 @@ let trainerSchema = new mongoose.Schema({
             rScore: Number,
             cScore: Number
         }]
-    }
+    }]
 });
 
 //Return model
