@@ -9,10 +9,10 @@ let trainerSchema = new mongoose.Schema({
         title: String,
         date: String,
         traineeCount: Number,
-        tqi: Number,
         results: [{
             kScore: Number,
-            rScore: Number
+            rScore: Number,
+            cScore: Number
         }]
     }]
 });
