@@ -24,9 +24,8 @@ app.use(expressLogging(logger));
 
 //Routes
 app.use("/api", require("./routes/api"));
-app.put("/addWeek", (req, res, next) => {
+app.put("/addWeek", (req, res) => {
     trainer.findOneAndUpdate({ name: req.name }, { $push: { feedback: req.feedback } });
-    next();
 });
 
 //Starting Server
