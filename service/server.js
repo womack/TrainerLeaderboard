@@ -5,7 +5,7 @@ let bodyParser = require("body-parser");
 let expressLogging = require("express-logging");
 let logger = require("logops");
 let cors = require("cors");
-let trainer = require("../models/trainer");
+let trainer = require("./models/trainer");
 
 //MongoDB
 mongoose.Promise = global.Promise;
