@@ -25,8 +25,17 @@ app.use(expressLogging(logger));
 //Routes
 app.use("/api", require("./routes/api"));
 app.put("/addWeek", (req, res) => {
-    console.log(req.body);
-    trainer.findOneAndUpdate({ name: req.body.name }, { $push: { feedback: req.body.feedback } });
+    let tmpTrainer = trainer(req.body);
+    tmpTrainer.save((err, trainerresp) => {
+        if (err || trainerresp === null) {
+            return res.send(err || new Error("Trainers feedback was not added successfully"));
+            trainer.findOneAndUpdate({ name: req.body.name }, { $push: { feedback: req.body.feedback } }, { new: true }, (err, resp) => {
+                if (err) { return res.send(err) };
+                res.json(trainerresp);
+            });
+        }
+    })
+
 });
 
 //Starting Server
