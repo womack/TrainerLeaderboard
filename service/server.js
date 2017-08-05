@@ -29,6 +29,7 @@ app.put("/addWeek", (req, res) => {
 
     trainer.findOneAndUpdate({ "name": req.body.name }, { $push: { "feedback": req.body.feedback } }, { new: true }, (err, resp) => {
         if (err) { return res.send(err) };
+        res.send("Added Successfully");
     });
 
 });
