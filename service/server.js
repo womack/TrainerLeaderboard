@@ -27,7 +27,7 @@ app.use("/api", require("./routes/api"));
 app.put("/addWeek", (req, res, error) => {
     trainer.findOneAndUpdate({ name: req.name }, { $push: { feedback: req.feedback } });
     if (error) {
-        return res.send("error", error);
+        return res.send("error" + error);
     }
 });
 
