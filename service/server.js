@@ -30,6 +30,8 @@ app.put("/addWeek", (req, res) => {
         if (err || trainerresp === null) {
             return res.send(err || new Error("Trainers feedback was not added successfully"));
         }
+        console.log(req.body.name);
+        console.log("-----------", trainer);
         trainer.findOneAndUpdate({ "name": req.body.name }, { $push: { "feedback": req.body.feedback } }, { new: true }, (err, resp) => {
             if (err) { return res.send(err) };
             res.json(trainerresp);
