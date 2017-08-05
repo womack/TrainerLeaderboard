@@ -23,6 +23,7 @@ app.use(expressLogging(logger));
 
 //Routes
 app.use("/api", require("./routes/api"));
+app.use("/addWeek", require("./routes/addWeek").addWeek)
 
 //Starting Server
 app.listen(port);
