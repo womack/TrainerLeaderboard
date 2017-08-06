@@ -12,3 +12,5 @@ yarn-error.log*
 /front-end/node_modules
 /service/node_modules
 /csvparser/node_modules
+/front-end/dist
+/front-end/src/privates.js

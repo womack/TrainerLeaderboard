@@ -12,7 +12,7 @@
                 <div v-if="trainer">
                     <h6>{{trainer.name}} </h6>
                     <!--<a v-bind:href="source.url" class="btn btn-primary" target="_blank">Go To {{source.name}} Website</a>
-                                                                                                                        Will be useful to direct to pages-->
+                                                                                                                                        Will be useful to direct to pages-->
                 </div>
             </div>
         </div>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+const ip = require("../privates").ip;
 export default {
     name: "trainerelection",
     data() {
@@ -39,7 +40,7 @@ export default {
         }
     },
     created: function () {
-        this.$http.get("http://192.168.0.23:3000/api/trainers")
+        this.$http.get(`http://${ip}:3000/api/trainers`)
             .then((response) => {
                 this.trainers = response.data;
             });

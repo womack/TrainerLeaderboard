@@ -4,7 +4,7 @@
             <div class="Chart_list">
                 <div class="Chart">
                     <h2>Leaderboard</h2>
-                    <chart :chart-data="datacollection" :width="1500" :height="800" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 0.2 } }]} }" :label="labels">
+                    <chart class="bchart" :chart-data="datacollection" :width="1125" :height="600" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 0.2 } }]} }" :label="labels">
                     </chart>
                 </div>
                 <div class="date">
@@ -28,6 +28,7 @@
 import Chart from "./Chart";
 import logic from "../logic/TrainerLogic";
 import Rankings from "./Rankings";
+const ip = require("../privates").ip;
 
 export default {
     components: {
@@ -61,7 +62,6 @@ export default {
     methods: {
         fillData() {
             this.currentResults = logic.getAverageScore(this.trainers, this.getSelectedDate());
-            console.log(this.currentResults)
             this.datacollection = {
                 labels: this.currentResults.names,
                 datasets: [
@@ -84,7 +84,7 @@ export default {
             }
         },
         loadTrainers() {
-            this.$http.get("http://192.168.0.23:3000/api/trainers")
+            this.$http.get(`http://${ip}:3000/api/trainers`)
                 .then((response) => {
                     this.trainers = response.data;
                     this.fillData();
@@ -99,10 +99,11 @@ export default {
     }
 };
 
-
-
 </script>
 
 <style>
-
+.bChart {
+    height: 600px;
+    width: 1125px;
+}
 </style>
