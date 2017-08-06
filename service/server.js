@@ -14,7 +14,7 @@ mongoose.connect("mongodb://localhost/leaderboardDB", { useMongoClient: true });
 //Express
 let app = express();
 let port = 3000;
-app.use(cors({ origin: "http://localhost:8080" }));
+app.use(cors({ origin: "http://192.168.0.23:8080" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
