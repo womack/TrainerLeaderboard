@@ -1,12 +1,11 @@
 <template>
     <div class="leaderBoard">
         <div class="container">
-            <div class="Chart__list">
+            <div class="Chart_list">
                 <div class="Chart">
                     <h2>Leaderboard</h2>
-                    <chart :chart-data="datacollection" :label="labels">
+                    <chart :chart-data="datacollection" :width="1500" :height="800" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 0.2 } }]} }" :label="labels">
                     </chart>
-    
                 </div>
                 <div class="date">
                     <select v-model="monthSelected" v-on:change="fillData()">
@@ -27,11 +26,13 @@
 
 <script>
 import Chart from "./Chart";
-import logic from "../logic/TrainerLogic"
+import logic from "../logic/TrainerLogic";
+import Rankings from "./Rankings";
 
 export default {
     components: {
-        Chart
+        Chart,
+        Rankings
     },
     data() {
         return {
@@ -54,26 +55,30 @@ export default {
             years: [2017, 2018, 2019, 2020, 2021, 2022],
             labels: [],
             trainers: [],
+            currentResults: {}
         }
     },
     methods: {
         fillData() {
+            this.currentResults = logic.getAverageScore(this.trainers, this.getSelectedDate());
+            console.log(this.currentResults)
             this.datacollection = {
-                labels: logic.getGraphLabels(this.trainers),
+                labels: this.currentResults.names,
                 datasets: [
+                    // {
+                    //     label: 'TQI',
+                    //     backgroundColor: '#f87979',
+                    //     data: logic.getData(this.trainers, "tqi", this.getSelectedDate())
+                    // }, 
                     {
-                        label: 'TQI',
-                        backgroundColor: '#f87979',
-                        data: logic.getData(this.trainers, "tqi", this.getSelectedDate())
-                    }, {
                         label: 'Average Knowledge Score',
-                        backgroundColor: '#f87979',
-                        data: logic.getAverageScore(this.trainers, "kScore", this.getSelectedDate())
+                        backgroundColor: '#4169e1',
+                        data: this.currentResults.results.kScore
                     },
                     {
                         label: 'Average Reccomendation Score',
-                        backgroundColor: '#f87979',
-                        data: logic.getAverageScore(this.trainers, "rScore", this.getSelectedDate())
+                        backgroundColor: '#fF7979',
+                        data: this.currentResults.results.rScore
                     }
                 ]
             }
@@ -86,7 +91,7 @@ export default {
                 });
         },
         getSelectedDate() {
-            return `${this.monthSelected}/${this.yearSelected}`;
+            return `${this.monthSelected + 1}${this.yearSelected.toString().substring(2, 4)}`;
         }
     },
     created() {

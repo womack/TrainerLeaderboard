@@ -5,6 +5,7 @@ let bodyParser = require("body-parser");
 let expressLogging = require("express-logging");
 let logger = require("logops");
 let cors = require("cors");
+let trainer = require("./models/trainer");
 
 //MongoDB
 mongoose.Promise = global.Promise;
@@ -20,9 +21,14 @@ app.use(bodyParser.json());
 //Logging
 app.use(expressLogging(logger));
 
-
 //Routes
 app.use("/api", require("./routes/api"));
+app.put("/addWeek", (req, res) => {
+    trainer.findOneAndUpdate({ "name": req.body.name }, { $push: { "feedback": req.body.feedback } }, { new: true }, (err, resp) => {
+        if (err) { return res.send(err) };
+        res.send("Added Successfully");
+    });
+});
 
 //Starting Server
 app.listen(port);

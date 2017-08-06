@@ -1,0 +1,17 @@
+{
+    "name": "csvtest",
+    "version": "1.0.0",
+    "description": "",
+    "main": "csvtest.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "csvtojson": "^1.1.7",
+        "readline-sync": "^1.4.7",
+        "request": "^2.81.0"
+    }
+}

@@ -3,7 +3,7 @@
     <div class="container">
       <LeaderBoard></LeaderBoard>
       <!-- <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
-        <TrainerData v-bind:trainer="trainer"></TrainerData> -->
+                                    <TrainerData v-bind:trainer="trainer"></TrainerData> -->
   
     </div>
   </div>
@@ -49,7 +49,8 @@ export default {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 2000px;
+  max-height: 1000px;
   margin: 0 auto;
 }
 </style>

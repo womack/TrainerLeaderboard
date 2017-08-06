@@ -2,8 +2,12 @@ import { Bar, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins;
 export default Bar.extend({
     mixins: [reactiveProp],
+    props: ['options'],
+    // options: {
+    //     responsive: true, maintainAspectRatio: false, scales: { yAxes: [{ stacked: false, ticks: { stepSize: 5, maxTicksLimit: 2 } }] }
+    // },
     mounted() {
-        this.renderChart(this.chartData, { responsive: true, maintainAspectRatio: false })
+        this.renderChart(this.chartData, this.options)
     }
 })
 
