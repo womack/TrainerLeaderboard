@@ -61,18 +61,19 @@ export default {
             this.datacollection = {
                 labels: logic.getGraphLabels(this.trainers),
                 datasets: [
+                    // {
+                    //     label: 'TQI',
+                    //     backgroundColor: '#f87979',
+                    //     data: logic.getData(this.trainers, "tqi", this.getSelectedDate())
+                    // }, 
                     {
-                        label: 'TQI',
-                        backgroundColor: '#f87979',
-                        data: logic.getData(this.trainers, "tqi", this.getSelectedDate())
-                    }, {
                         label: 'Average Knowledge Score',
-                        backgroundColor: '#f87979',
+                        backgroundColor: '#4169e1',
                         data: logic.getAverageScore(this.trainers, "kScore", this.getSelectedDate())
                     },
                     {
                         label: 'Average Reccomendation Score',
-                        backgroundColor: '#f87979',
+                        backgroundColor: '#fF7979',
                         data: logic.getAverageScore(this.trainers, "rScore", this.getSelectedDate())
                     }
                 ]
@@ -86,7 +87,7 @@ export default {
                 });
         },
         getSelectedDate() {
-            return `${this.monthSelected}/${this.yearSelected}`;
+            return `${this.monthSelected + 1}${this.yearSelected.toString().substring(2, 4)}`;
         }
     },
     created() {

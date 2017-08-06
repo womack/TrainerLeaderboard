@@ -8,7 +8,7 @@ let getData = (trainersObj, data = "tqi", date) => {
     for (let i = 0; i < trainersObj.length; i++) {
         tqi = 0;
         for (var j = 0, count = 0; j < trainersObj[i].feedback.length; j++) {
-            //if date has been passed as an arg, and the current week does not contian it, skip it.   
+            //if date has been passed as an arg, and the current week does not contian it, skip it.
             if (!!date && !trainersObj[i].feedback[j].date.includes(date)) {
                 continue;
             }
@@ -30,6 +30,7 @@ let getGraphLabels = (trainersObj) => {
 
 let getAverageScore = (trainersObj, data, date) => {
     let trainersAverages = [];
+
     //each trainer
     for (let i = 0; i < trainersObj.length; i++) {
         let trainerCourseAverages = 0;
@@ -39,22 +40,37 @@ let getAverageScore = (trainersObj, data, date) => {
             if (date && !trainersObj[i].feedback[j].date.includes(date)) {
                 continue;
             }
-            trainerCourseAverages += getAverageFromWeek(trainersObj[i].feedback[j].results, data);
-            count++;
+            let avgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, data);
+            if (avgFromWeek != -1) {
+                trainerCourseAverages += avgFromWeek;
+                count++;
+            }
         }
-        trainersAverages.push(trainerCourseAverages / count);
+        if (count <= 0)
+            count = 1;
+
+        let trainerResult = trainerCourseAverages / count;
+
+        trainersAverages.push(trainerResult);
+
     }
     return trainersAverages;
 }
 
 
 let getAverageFromWeek = (week, data) => {
-    let courseResultAverages = 0;
+    let courseResultAverages = 0, count = 0;
     //each result
-    for (var i = 0; i < week.length; i++) {
-        courseResultAverages += (week[i][data]);
+    for (let i = 0; i < week.length; i++) {
+        if (week[i][data]) {
+            courseResultAverages += (week[i][data]);
+            count++;
+        }
     }
-    return courseResultAverages / i;
+    if (count > 0)
+        return courseResultAverages / count;
+    else
+        return -1;
 }
 
 

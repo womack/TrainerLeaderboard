@@ -11,3 +11,4 @@ yarn-error.log*
 /node_modules
 /front-end/node_modules
 /service/node_modules
+/csvparser/node_modules

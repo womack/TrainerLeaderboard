@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .media-object {
-    width: 1280px;
+    width: 1880px;
     padding: 10px;
 }
 
