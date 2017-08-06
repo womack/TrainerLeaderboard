@@ -61,7 +61,6 @@ export default {
     methods: {
         fillData() {
             this.currentResults = logic.getAverageScore(this.trainers, this.getSelectedDate());
-            console.log(this.currentResults)
             this.datacollection = {
                 labels: this.currentResults.names,
                 datasets: [
