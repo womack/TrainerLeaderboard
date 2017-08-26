@@ -1,3 +1,7 @@
+A script to parse the feedback CSV then post it to the database
+
+prep instructions;
+
 deleted empty rows and top row headers
 deleted full stops
 renamed first knwl to Knowl
