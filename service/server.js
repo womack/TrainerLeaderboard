@@ -26,11 +26,11 @@ app.use(expressLogging(logger));
 app.use("/api", require("./routes/api"));
 app.put("/addWeek", (req, res) => {
     trainer.findOneAndUpdate({ "name": req.body.name }, { $push: { "feedback": req.body.feedback } }, { new: true }, (err, resp) => {
-        if (err) { return res.send(err) };
+        if (err) { return res.send(err); }
         res.send("Added Successfully");
     });
 });
 
 //Starting Server
 app.listen(port);
-console.log(`Running on ${port}`); 
+console.log("Running on ${port}"); 

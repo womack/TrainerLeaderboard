@@ -1,10 +1,12 @@
-# Lets go
+# A MEVN Stack application for the QAC Trainer teams feedback scores, to promote healthy competition.
 
 ##  Todo
-Load up website  
-	Have an option to view trainers history  
-	Option to view entire academys month leaderboard  
+Have an option to view trainers history  
+Profiles
+Distinct monthly rankings
 
 
-## > out.log
+
+## Server
+>> out.log
 to pipe output to a file, for api logging purposes.

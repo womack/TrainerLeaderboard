@@ -4,7 +4,7 @@
             <div class="Chart_list">
                 <div class="Chart">
                     <h2>Leaderboard</h2>
-                    <chart class="bchart" :chart-data="datacollection" :width="1125" :height="600" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 0.2 } }]} }" :label="labels">
+                    <chart :chart-data="datacollection" :width="1125" :height="600" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 0.2 } }]} }" :label="labels">
                     </chart>
                 </div>
                 <div class="date">
@@ -102,8 +102,5 @@ export default {
 </script>
 
 <style>
-.bChart {
-    height: 600px;
-    width: 1125px;
-}
+
 </style>
