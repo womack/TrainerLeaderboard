@@ -4,7 +4,8 @@ const fs = require("fs");
 const request = require("request");
 const readlineSync = require("readline-sync");
 
-let filePath = "", date = "";
+let filePath = "",
+    date = "";
 
 
 //delete a property from an object but return what it was, tidying objects.
@@ -19,7 +20,7 @@ let postReq = (trainerObj) => {
         body: trainerObj,
         json: true,
         url: "http://192.168.0.23:3000/api/trainers"
-    }
+    };
     request(options, (err, res, body) => {
         if (err) {
             console.error("error posting json: ", err);
@@ -35,18 +36,21 @@ let putReq = (trainerObj) => {
         body: trainerObj,
         json: true,
         url: "http://192.168.0.23:3000/addWeek"
-    }
+    };
     request(options, (err, res, body) => {
         if (err) {
             console.error("error posting json: ", err);
             throw err;
         }
-        let statusCode = res.statusCode
-        console.log('statusCode: ', statusCode)
+        let statusCode = res.statusCode;
+        console.log("statusCode: ", statusCode);
     });
 };
 
-let parseIntoTrainerObj = ({ postArray, putArray }) => {
+let parseIntoTrainerObj = ({
+    postArray,
+    putArray
+}) => {
     for (let i = 0; i < postArray.length; i++) {
         console.log("Posting " + postArray[i].name);
         postReq(postArray[i]);
@@ -83,13 +87,21 @@ let parseFeedback = (trainerMap) => {
         console.log(date);
         let answer = readlineSync.question(`Are you posting or putting ${key}? `);
         if (answer.toLowerCase() === "post") {
-            postArray.push({ name: key, feedback: feedbackArray });
-        }
-        else if (answer.toLowerCase() === "put") {
-            putArray.push({ name: key, feedback: feedbackObj });
+            postArray.push({
+                name: key,
+                feedback: feedbackArray
+            });
+        } else if (answer.toLowerCase() === "put") {
+            putArray.push({
+                name: key,
+                feedback: feedbackObj
+            });
         }
     });
-    parseIntoTrainerObj({ postArray, putArray });
+    parseIntoTrainerObj({
+        postArray,
+        putArray
+    });
 };
 //Once data is loaded, categorize the data into trainer objects/map
 let parseTrainers = (jsonData) => {
@@ -97,8 +109,7 @@ let parseTrainers = (jsonData) => {
     for (let i = 0; i < jsonData.length; i++) {
         if (trainerMap.has(jsonData[i].Name)) {
             trainerMap.get(deleteAndReturn(jsonData[i], "Name")).push(jsonData[i]);
-        }
-        else {
+        } else {
             trainerMap.set(deleteAndReturn(jsonData[i], "Name"), [jsonData[i]]);
         }
     }
@@ -122,7 +133,9 @@ let readCSV = (fp, cb) => {
             jsonData.push(jsonObj);
         }
     }).on("done", (error) => {
-        if (error) { console.log(error); };
+        if (error) {
+            console.log(error);
+        }
         cb(jsonData);
     });
 };

@@ -29,18 +29,18 @@ export default {
     },
     methods: {
         getFeedback: logic.getFeedback,
-        updateTrainer: function (trainer) {
+        updateTrainer: function(trainer) {
             this.$http.get("http://192.168.0.23:3000/api/trainers?name=" + trainer)
                 .then((response) => {
                     this.feedback = this.getFeedback(response.data);
                 });
         }
     },
-    created: function () {
+    created: function() {
         this.updateTrainer(this.trainer);
     },
     watch: {
-        trainer: function (val) {
+        trainer: function(val) {
             this.updateTrainer(val);
         }
     }
