@@ -20,7 +20,7 @@ let postReq = (trainerObj) => {
         body: trainerObj,
         json: true,
         url: "http://192.168.0.23:3000/api/trainers"
-    }
+    };
     request(options, (err, res, body) => {
         if (err) {
             console.error("error posting json: ", err);
@@ -36,14 +36,14 @@ let putReq = (trainerObj) => {
         body: trainerObj,
         json: true,
         url: "http://192.168.0.23:3000/addWeek"
-    }
+    };
     request(options, (err, res, body) => {
         if (err) {
             console.error("error posting json: ", err);
             throw err;
         }
-        let statusCode = res.statusCode
-        console.log('statusCode: ', statusCode)
+        let statusCode = res.statusCode;
+        console.log("statusCode: ", statusCode);
     });
 };
 
@@ -135,7 +135,7 @@ let readCSV = (fp, cb) => {
     }).on("done", (error) => {
         if (error) {
             console.log(error);
-        };
+        }
         cb(jsonData);
     });
 };

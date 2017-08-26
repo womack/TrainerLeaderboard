@@ -1,3 +1,22 @@
+let getAverageFromWeek = (week, data) => {
+  let courseResultAverages = 0,
+    count = 0;
+  //each result
+  for (let i = 0; i < week.length; i++) {
+    if (week[i][data]) {
+      courseResultAverages += (week[i][data]);
+      count++;
+    }
+  }
+  if (count > 0) {
+    return courseResultAverages / count;
+  }
+  //If there was actually any results from this week
+  else {
+    return -1;
+  }
+};
+
 //jesus christ please refactor me at some point
 let getAverageScore = (trainersObj, date) => {
   let trainersAverages = {
@@ -44,27 +63,6 @@ let getAverageScore = (trainersObj, date) => {
   }
   return trainersAverages;
 };
-
-
-let getAverageFromWeek = (week, data) => {
-  let courseResultAverages = 0,
-    count = 0;
-  //each result
-  for (let i = 0; i < week.length; i++) {
-    if (week[i][data]) {
-      courseResultAverages += (week[i][data]);
-      count++;
-    }
-  }
-  if (count > 0) {
-    return courseResultAverages / count;
-  }
-  //If there was actually any results from this week
-  else {
-    return -1;
-  }
-};
-
 
 module.exports = {
   getAverageScore
