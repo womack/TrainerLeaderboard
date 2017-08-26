@@ -12,7 +12,7 @@
                 <div v-if="trainer">
                     <h6>{{trainer.name}} </h6>
                     <!--<a v-bind:href="source.url" class="btn btn-primary" target="_blank">Go To {{source.name}} Website</a>
-                                                                                                                                        Will be useful to direct to pages-->
+                                                                                                                                            Will be useful to direct to pages-->
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@ export default {
         }
     },
     methods: {
-        trainerChanged: function (e) {
+        trainerChanged: function(e) {
             for (let i = 0; i < this.trainers.length; i++) {
                 if (this.trainers[i].name == e.target.value) {
                     this.trainer = this.trainers[i];
@@ -39,7 +39,7 @@ export default {
             this.$emit("trainerChanged", e.target.value);
         }
     },
-    created: function () {
+    created: function() {
         this.$http.get(`http://${ip}:3000/api/trainers`)
             .then((response) => {
                 this.trainers = response.data;

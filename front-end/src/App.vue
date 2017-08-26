@@ -3,8 +3,8 @@
     <div class="container">
       <LeaderBoard></LeaderBoard>
       <!-- <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
-                                    <TrainerData v-bind:trainer="trainer"></TrainerData> -->
-  
+                                      <TrainerData v-bind:trainer="trainer"></TrainerData> -->
+
     </div>
   </div>
 </template>
