@@ -14,3 +14,6 @@ yarn-error.log*
 /csvparser/node_modules
 /front-end/dist
 /front-end/src/privates.js
+csvparser/archive
+csvparser/Anonymous Trainer Comments-070817.csv
+csvparser/Anonymous Trainer Comments-140817.csv

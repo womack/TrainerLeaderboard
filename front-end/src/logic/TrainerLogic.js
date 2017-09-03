@@ -40,6 +40,7 @@ let getAverageScore = (trainersObj, date) => {
         //each course/week
         for (var j = 0, rScoreCount = 0, kScoreCount = 0; j < trainersObj[i].feedback.length; j++) {
             //if date has been passed as an arg, and the current week does not contian it, skip it.
+            //turn this into a filter
             if (date && !trainersObj[i].feedback[j].date.includes(date)) {
                 continue;
             }
