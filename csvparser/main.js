@@ -30,10 +30,9 @@ let readCSV = (fp, cb) => {
             }
         }
         jsonObj.date = date;
-        if (!jsonObj["Name"].includes("Project") && (jsonObj.hasOwnProperty("Knowl") || jsonObj.hasOwnProperty("Perf") || jsonObj.hasOwnProperty("Ov")))
-            jsonData.push(jsonObj);
+        if (!jsonObj["Name"].includes("Project") && (jsonObj.hasOwnProperty("Knowl") || jsonObj.hasOwnProperty("Perf") || jsonObj.hasOwnProperty("Ov"))) { jsonData.push(jsonObj); }
     }).on("done", (error) => {
-        if (error) console.log(error);
+        if (error) { console.log(error); }
         cb(jsonData);
     });
 };
@@ -93,52 +92,48 @@ let parseFeedback = (trainerMap) => {
 };
 
 let parseIntoTrainerObj = ({ postArray, putArray }) => {
-    for (let i = 0; i < postArray.length; i++) {
-        console.log("Posting " + postArray[i].name);
-        postReq(postArray[i]);
-    }
-    for (let i = 0; i < putArray.length; i++) {
-        console.log("Putting " + putArray[i].name);
-        putReq(putArray[i]);
-    }
+    postArray.forEach((a) => {
+        console.log("Posting " + a.name);
+        postReq(a);
+    });
+    putArray.forEach((a) => {
+        console.log("Putting " + a.name);
+        putReq(a);
+    });
 };
 
 let postReq = (trainerObj) => {
     let options = {
-        method: 'post',
+        method: "post",
         body: trainerObj,
         json: true,
-        url: 'http://192.168.0.23:3000/api/trainers'
+        url: "http://192.168.0.23:3000/api/trainers"
     }
-    request(options, function (err, res, body) {
+    request(options, (err, res, body) => {
         if (err) {
-            console.error('error posting json: ', err)
-            throw err
+            console.error("error posting json: ", err);
+            throw err;
         }
-        var headers = res.headers
-        var statusCode = res.statusCode
-        //   console.log('headers: ', headers)
-        console.log('statusCode: ', statusCode)
-        //   console.log('body: ', body)
+        let headers = res.headers;
+        let statusCode = res.statusCode;
+        console.log("statusCode: ", statusCode);
     })
 };
 let putReq = (trainerObj) => {
     let options = {
-        method: 'put',
+        method: "put",
         body: trainerObj,
         json: true,
-        url: 'http://192.168.0.23:3000/addWeek'
+        url: "http://192.168.0.23:3000/addWeek"
     }
-    request(options, function (err, res, body) {
+    request(options, (err, res, body) => {
         if (err) {
-            console.error('error posting json: ', err)
-            throw err
+            console.error("error posting json: ", err);
+            throw err;
         }
-        var headers = res.headers
-        var statusCode = res.statusCode
-        //   console.log('headers: ', headers)
-        console.log('statusCode: ', statusCode)
-        //   console.log('body: ', body)
+        let headers = res.headers;
+        let statusCode = res.statusCode;
+        console.log("statusCode: ", statusCode);
     })
 };
 
