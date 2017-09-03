@@ -45,13 +45,13 @@ let getAverageScore = (trainersObj, date) => {
             }
             //kScore
             let kScoreavgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, "kScore");
-            if (kScoreavgFromWeek != -1) {
+            if (kScoreavgFromWeek !== -1) {
                 kScoretrainerCourseAverages += kScoreavgFromWeek;
                 kScoreCount++;
             }
             //rScore
             let rScoreavgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, "rScore");
-            if (rScoreavgFromWeek != -1) {
+            if (rScoreavgFromWeek !== -1) {
                 rScoretrainerCourseAverages += rScoreavgFromWeek;
                 rScoreCount++;
             }

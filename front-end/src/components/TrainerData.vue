@@ -19,7 +19,7 @@
 
 <script>
 
-import logic from "../logic/TrainerLogic"
+import logic from "../logic/TrainerLogic";
 
 export default {
     name: "trainerdata",
@@ -30,17 +30,15 @@ export default {
         }
     },
     methods: {
-        getFeedback: logic.getFeedback,
         updateTrainer: function(trainer) {
             this.$http.get("http://192.168.0.23:3000/api/trainers?name=" + trainer)
                 .then((response) => {
                     //get average from data, should have this done somewhere else.
                     // store the entire results object somewhere then do work on it
-                    let tmp = this.getFeedback(response.data);
+                    let tmp = logic.getFeedback(response.data);
                     logic.determineAverages(tmp);
                     logic.determineTQI(tmp);
-                    this.feedback = tmp;
-                    
+                    this.feedback = tmp;                    
                 });
         }
     },
