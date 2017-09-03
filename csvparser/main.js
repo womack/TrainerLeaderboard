@@ -136,12 +136,12 @@ let addRequest = (trainerObj, typeOfRequest, url) => {
         json: true,
         url
     }
-    // request(options, (err, res, body) => {
-    //     if (err) {
-    //         console.error("error posting json: ", err);
-    //         throw err;
-    //     }
-    //     console.log("statusCode: ", res.statusCode);
-    // })
+    request(options, (err, res, body) => {
+        if (err) {
+            console.error("error posting json: ", err);
+            throw err;
+        }
+        console.log("statusCode: ", res.statusCode);
+    })
     console.log(JSON.stringify(options.body, null, 2));
 }

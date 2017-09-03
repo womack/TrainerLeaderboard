@@ -25,6 +25,7 @@ app.use(expressLogging(logger));
 //Routes
 app.use("/api", require("./routes/api"));
 app.put("/addWeek", (req, res) => {
+    console.log(req);
     trainer.findOneAndUpdate({ "name": req.body.name }, { $push: { "feedback": req.body.feedback } }, { new: true }, (err, resp) => {
         if (err) { return res.send(err) };
         res.send("Added Successfully");
