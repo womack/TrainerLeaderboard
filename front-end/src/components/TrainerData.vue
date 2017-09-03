@@ -4,11 +4,12 @@
             <ul class="media-list">
                 <li class="media" v-for="week in feedback">
                     <div class="media-body">
-                        <h4 class="media-heading"> {{week.title}}</h4>
+                        <h4 class="media-heading"> <b>{{week.title}}</b></h4>
                         <h5>Date: {{week.date}}</h5>
-                        <p>Attendees: {{week.totalAttendees}}</p>
+                        <p>Attendees: {{week.traineeCount}}</p>
                         <p>TQI: {{week.tqi}}</p>
-                        <p>Average: {{week.avg}}</p>
+                        <p>Average Knowledge Score: {{week.avgK}}</p>
+                        <p>Average Reccomendation Score: {{week.avgR}}</p>                        
                     </div>
                 </li>
             </ul>
@@ -17,8 +18,9 @@
 </template>
 
 <script>
+
 import logic from "../logic/TrainerLogic"
-let jsonObj = {};
+
 export default {
     name: "trainerdata",
     props: ["trainer"],
@@ -32,13 +34,20 @@ export default {
         updateTrainer: function(trainer) {
             this.$http.get("http://192.168.0.23:3000/api/trainers?name=" + trainer)
                 .then((response) => {
-                    this.feedback = this.getFeedback(response.data);
+                    //get average from data, should have this done somewhere else.
+                    // store the entire results object somewhere then do work on it
+                    let tmp = this.getFeedback(response.data);
+                    logic.determineAverages(tmp);
+                    logic.determineTQI(tmp);
+                    this.feedback = tmp;
+                    
                 });
         }
     },
-    created: function() {
-        this.updateTrainer(this.trainer);
-    },
+    //Causes an issue since there isnt a trainer selected by default, dont think it should select one either, so disabling for now.
+    // created: function() {
+    //     this.updateTrainer(this.trainer);
+    // },
     watch: {
         trainer: function(val) {
             this.updateTrainer(val);

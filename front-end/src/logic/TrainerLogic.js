@@ -1,6 +1,6 @@
-// let getFeedback = (trainer) => {
-//     return trainer[0].feedback;
-// }
+let getFeedback = (trainer) => {
+    return trainer[0].feedback;
+};
 
 // // //probably just used for tqi unless i rework the trainer object schema
 // let getData = (trainersObj, data = "tqi", date) => {
@@ -65,7 +65,7 @@ let getAverageScore = (trainersObj, date) => {
         }
     }
     return trainersAverages;
-}
+};
 
 
 let getAverageFromWeek = (week, data) => {
@@ -81,9 +81,48 @@ let getAverageFromWeek = (week, data) => {
         return courseResultAverages / count;
     else
         return -1;
-}
+};
+
+let determineTQI = (feedbacks) => {
+    feedbacks.map((a) => {
+        let detractors = 0, promoters = 0, neutral = 0;
+        a.results.forEach((element) => {
+            if (doesExist(element.rScore))
+                return;
+            else if (element.rScore > 8)
+                promoters++;
+            else if (element.rScore < 7)
+                detractors++;
+            else
+                neutral++;
+        });
+        a.tqi = twoDecimalPlaces(((promoters - detractors) / (detractors + promoters + neutral)) * 100);
+    });
+};
+
+let determineAverages = (feedbacks) => {
+    feedbacks.map((a) => {
+        a.avgK = twoDecimalPlaces(getAverageFromWeek(a.results, "kScore"));
+        a.avgR = twoDecimalPlaces(getAverageFromWeek(a.results, "rScore"));
+    });
+};
+
+let twoDecimalPlaces = (val) => {
+    return parseInt(val.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+};
+
+let doesExist = (val) => {
+    if (val !== undefined || val !== null)
+        return false;
+    else
+        return true;
+};
 
 
 module.exports = {
-    getAverageScore
-}
+    getAverageScore,
+    getAverageFromWeek,
+    getFeedback,
+    determineTQI,
+    determineAverages
+};

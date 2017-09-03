@@ -1,35 +1,18 @@
 <template>
   <div id="app">
+    <div><router-link to="/profiles">Trainers</router-link></div>
+    <div><router-link to="/leaderboard">Leaderboard</router-link></div>    
     <div class="container">
+  
       <router-view></router-view>
-      <!--  <LeaderBoard></LeaderBoard>
-        <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
-                                          <TrainerData v-bind:trainer="trainer"></TrainerData> -->
+      <!--  <LeaderBoard></LeaderBoard> -->
 
     </div>
   </div>
 </template>
 
 <script>
-// import TrainerSelection from "./components/TrainerSelection";
-// import TrainerData from "./components/TrainerData";
-// export default {
-//   name: 'app',
-//   components: {
-//     TrainerSelection,
-//     TrainerData
-//   },
-//   data() {
-//     return {
-//       trainer: ""
-//     }
-//   },
-//   methods: {
-//     trainerChanged: function (trainer) {
-//       this.trainer = trainer;
-//     }
-//   }
-// }
+
 import LeaderBoard from "./components/LeaderBoard";
 export default {
   name: "app",

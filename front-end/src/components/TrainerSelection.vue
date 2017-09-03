@@ -3,17 +3,17 @@
         <div>
             <div class="jumbotron">
                 <h2>
-                    <span class="glyphicon glyphicon-list-alt"></span>Trainer List</h2>
-                <h4> Select trainer</h4>
+                    <span class="glyphicon glyphicon-list-alt"></span> Trainer List</h2>
+                 <br>
                 <select class="form-control" v-on:change="trainerChanged">
-                    <option value=""> Please select trainer </option>
+                    <option value="">Please select trainer </option>
                     <option v-bind:value="trainer.name" v-for="trainer in trainers">{{trainer.name}}</option>
                 </select>
-                <div v-if="trainer">
+                <!-- <div v-if="trainer">
                     <h6>{{trainer.name}} </h6>
                     <!--<a v-bind:href="source.url" class="btn btn-primary" target="_blank">Go To {{source.name}} Website</a>
-                                                                                                                                            Will be useful to direct to pages-->
-                </div>
+                                                                                                                                            Will be useful to direct to pages
+                </div> -->
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
 <script>
 const ip = require("../privates").ip;
 export default {
-    name: "trainerelection",
+    name: "trainerselection",
     data() {
         return {
             trainers: [],
