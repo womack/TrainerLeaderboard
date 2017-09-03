@@ -9,12 +9,12 @@ let filePath = "", date = "";
 //Find file - "./anonymous-feedback-comments-240717.csv";
 fs.readdir("./", (err, items) => {
     for (let i = 0; i < items.length; i++) {
-        if (items[i].includes("anonymous") || items[i].includes("feedback")) {
+        if (items[i].toLowerCase().includes("anonymous") || items[i].toLowerCase().includes("feedback")) {
             filePath = __dirname + "\\" + items[i];
         }
-
     }
     date = filePath.substring(filePath.lastIndexOf("."), filePath.lastIndexOf("-") + 1);
+    debugger;
     readCSV(filePath, parseTrainers);
 });
 
@@ -93,47 +93,57 @@ let parseFeedback = (trainerMap) => {
 
 let parseIntoTrainerObj = ({ postArray, putArray }) => {
     postArray.forEach((a) => {
-        console.log("Posting " + a.name);
-        postReq(a);
+        addRequest(a), "post", "http://192.168.0.23:3000/api/trainers";
     });
     putArray.forEach((a) => {
-        console.log("Putting " + a.name);
-        putReq(a);
+        addRequest(a, "put", "http://192.168.0.23:3000/addWeek");
     });
 };
 
-let postReq = (trainerObj) => {
-    let options = {
-        method: "post",
-        body: trainerObj,
-        json: true,
-        url: "http://192.168.0.23:3000/api/trainers"
-    }
-    request(options, (err, res, body) => {
-        if (err) {
-            console.error("error posting json: ", err);
-            throw err;
-        }
-        let headers = res.headers;
-        let statusCode = res.statusCode;
-        console.log("statusCode: ", statusCode);
-    })
-};
-let putReq = (trainerObj) => {
-    let options = {
-        method: "put",
-        body: trainerObj,
-        json: true,
-        url: "http://192.168.0.23:3000/addWeek"
-    }
-    request(options, (err, res, body) => {
-        if (err) {
-            console.error("error posting json: ", err);
-            throw err;
-        }
-        let headers = res.headers;
-        let statusCode = res.statusCode;
-        console.log("statusCode: ", statusCode);
-    })
-};
+// let postReq = (trainerObj) => {
+//     let options = {
+//         method: "post",
+//         body: trainerObj,
+//         json: true,
+//         url: "http://192.168.0.23:3000/api/trainers"
+//     }
+//     request(options, (err, res, body) => {
+//         if (err) {
+//             console.error("error posting json: ", err);
+//             throw err;
+//         }
+//         console.log("statusCode: ", res.statusCode);
+//     })
+// };
+// let putReq = (trainerObj) => {
+//     let options = {
+//         method: "put",
+//         body: trainerObj,
+//         json: true,
+//         url: "http://192.168.0.23:3000/addWeek"
+//     }
+//     request(options, (err, res, body) => {
+//         if (err) {
+//             console.error("error posting json: ", err);
+//             throw err;
+//         }
+//         console.log("statusCode: ", res.statusCode);
+//     })
+// };
 
+let addRequest = (trainerObj, typeOfRequest, url) => {
+    console.log(`${typeOfRequest.toUpperCase()}ING ${trainerObj.name}`);
+    let options = {
+        method: typeOfRequest,
+        body: trainerObj,
+        json: true,
+        url
+    }
+    request(options, (err, res, body) => {
+        if (err) {
+            console.error("error posting json: ", err);
+            throw err;
+        }
+        console.log("statusCode: ", res.statusCode);
+    })
+}
