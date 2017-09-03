@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <div class="container">
-      <LeaderBoard></LeaderBoard>
-      <!-- <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
-                                      <TrainerData v-bind:trainer="trainer"></TrainerData> -->
+      <router-view></router-view>
+      <!--  <LeaderBoard></LeaderBoard>
+        <TrainerSelection v-on:trainerChanged="trainerChanged"></TrainerSelection>
+                                          <TrainerData v-bind:trainer="trainer"></TrainerData> -->
 
     </div>
   </div>
