@@ -1,6 +1,4 @@
-let getFeedback = (trainer) => {
-    return trainer[0].feedback;
-};
+
 
 // // //probably just used for tqi unless i rework the trainer object schema
 // let getData = (trainersObj, data = "tqi", date) => {
@@ -28,6 +26,9 @@ let getFeedback = (trainer) => {
 //     }
 //     return labels;
 // }
+let getFeedback = (trainer) => {
+    return trainer[0].feedback;
+};
 
 let getAverageScore = (trainersObj, date) => {
 
@@ -39,18 +40,19 @@ let getAverageScore = (trainersObj, date) => {
         //each course/week
         for (var j = 0, rScoreCount = 0, kScoreCount = 0; j < trainersObj[i].feedback.length; j++) {
             //if date has been passed as an arg, and the current week does not contian it, skip it.
+            //turn this into a filter
             if (date && !trainersObj[i].feedback[j].date.includes(date)) {
                 continue;
             }
             //kScore
             let kScoreavgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, "kScore");
-            if (kScoreavgFromWeek != -1) {
+            if (kScoreavgFromWeek !== -1) {
                 kScoretrainerCourseAverages += kScoreavgFromWeek;
                 kScoreCount++;
             }
             //rScore
             let rScoreavgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, "rScore");
-            if (rScoreavgFromWeek != -1) {
+            if (rScoreavgFromWeek !== -1) {
                 rScoretrainerCourseAverages += rScoreavgFromWeek;
                 rScoreCount++;
             }
@@ -67,7 +69,6 @@ let getAverageScore = (trainersObj, date) => {
     return trainersAverages;
 };
 
-
 let getAverageFromWeek = (week, data) => {
     let courseResultAverages = 0, count = 0;
     //each result
@@ -77,24 +78,18 @@ let getAverageFromWeek = (week, data) => {
             count++;
         }
     }
-    if (count > 0)
-        return courseResultAverages / count;
-    else
-        return -1;
+    if (count > 0) { return courseResultAverages / count; }
+    else { return -1; }
 };
 
 let determineTQI = (feedbacks) => {
     feedbacks.map((a) => {
         let detractors = 0, promoters = 0, neutral = 0;
         a.results.forEach((element) => {
-            if (doesExist(element.rScore))
-                return;
-            else if (element.rScore > 8)
-                promoters++;
-            else if (element.rScore < 7)
-                detractors++;
-            else
-                neutral++;
+            if (doesExist(element.rScore)) { return; }
+            else if (element.rScore > 8) { promoters++; }
+            else if (element.rScore < 7) { detractors++; }
+            else { neutral++; }
         });
         a.tqi = twoDecimalPlaces(((promoters - detractors) / (detractors + promoters + neutral)) * 100);
     });
@@ -117,7 +112,6 @@ let doesExist = (val) => {
     else
         return true;
 };
-
 
 module.exports = {
     getAverageScore,

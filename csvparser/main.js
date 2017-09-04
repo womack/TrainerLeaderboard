@@ -4,38 +4,41 @@ const fs = require("fs");
 const request = require("request");
 const readlineSync = require("readline-sync");
 
-let filePath = "", date = "";
-
-//Find file - "./anonymous-feedback-comments-240717.csv";
+//Find files - format expects a dash then a date,
+// with either anonymous or feedback in the title.  - "./anonymous-feedback-comments-240717.csv";
 fs.readdir("./", (err, items) => {
-    for (let i = 0; i < items.length; i++) {
-        if (items[i].includes("anonymous") || items[i].includes("feedback")) {
-            filePath = __dirname + "\\" + items[i];
+    let filesToDo = [];
+    items.forEach((a) => {
+        if (a.toLowerCase().includes("anonymous") || a.toLowerCase().includes("feedback")) {
+            let filePath = __dirname + "\\" + a;
+            let date = "";
+            date = filePath.substring(filePath.lastIndexOf("."), filePath.lastIndexOf("-") + 1);
+            filesToDo.push({ fp: filePath, cb: parseTrainers, date });
         }
-
-    }
-    date = filePath.substring(filePath.lastIndexOf("."), filePath.lastIndexOf("-") + 1);
-    readCSV(filePath, parseTrainers);
+    });
+    readCSV(filesToDo);
 });
 
-let readCSV = (fp, cb) => {
-    let jsonData = [];
-    csvtoJson().fromFile(fp).on("json", (jsonObj) => {
-        for (let key in jsonObj) {
-            if (jsonObj.hasOwnProperty(key)) {
-                //Deleted non-desired fields
-                if (jsonObj[key].includes("#N/A") || key.includes("field") || (!key.includes("Perf") && !key.includes("Knowl") && !key.includes("Name") && !key.includes("Title") && !(key === "Ov"))) {
-                    delete jsonObj[key];
+let readCSV = (filesToDo) => {
+    filesToDo.forEach(({ fp, cb, date }) => {
+        let jsonData = [];
+        csvtoJson().fromFile(fp).on("json", (jsonObj) => {
+            for (let key in jsonObj) {
+                if (jsonObj.hasOwnProperty(key)) {
+                    //Deleted non-desired fields
+                    if (jsonObj[key].includes("#N/A") || key.includes("field") || (!key.includes("Perf") && !key.includes("Knowl") && !key.includes("Name") && !key.includes("Title") && !(key === "Ov"))) {
+                        delete jsonObj[key];
+                    }
                 }
             }
-        }
-        jsonObj.date = date;
-        if (!jsonObj["Name"].includes("Project") && (jsonObj.hasOwnProperty("Knowl") || jsonObj.hasOwnProperty("Perf") || jsonObj.hasOwnProperty("Ov")))
-            jsonData.push(jsonObj);
-    }).on("done", (error) => {
-        if (error) console.log(error);
-        cb(jsonData);
-    });
+            jsonObj.date = date;
+            if (!jsonObj["Name"].includes("Project") && (jsonObj.hasOwnProperty("Knowl") || jsonObj.hasOwnProperty("Perf") || jsonObj.hasOwnProperty("Ov"))) { jsonData.push(jsonObj); }
+        }).on("done", (error) => {
+            if (error) { console.log(error); }
+            cb(jsonData);
+        });
+    })
+
 };
 //delete a property from an object but return what it was, tidying objects.
 let deleteAndReturn = (data, property) => {
@@ -59,8 +62,9 @@ let parseTrainers = (jsonData) => {
 
 let parseFeedback = (trainerMap) => {
     //trainer list
-    let postArray = [];
-    let putArray = [];
+    // let postArray = [];
+    // let putArray = [];
+    let addArray = [];
 
     trainerMap.forEach((value, key, map) => {
         let feedbackArray = [];
@@ -80,65 +84,45 @@ let parseFeedback = (trainerMap) => {
             feedbackObj.results.push(result);
         });
         feedbackArray.push(feedbackObj);
-        console.log(date);
+
+        console.log(value[0].date);
         let answer = readlineSync.question(`Are you posting or putting ${key}? `);
-        if (answer.toLowerCase() === "post") {
-            postArray.push({ name: key, feedback: feedbackArray });
+        if (answer.toLowerCase() === "post" || answer.toLowerCase() === "put") {
+            addArray.push({ name: key, feedback: feedbackArray, ans: answer.toLowerCase() })
         }
-        else if (answer.toLowerCase() === "put") {
-            putArray.push({ name: key, feedback: feedbackObj });
-        }
+
     });
-    parseIntoTrainerObj({ postArray, putArray });
+    parseIntoTrainerObj(addArray);
 };
 
-let parseIntoTrainerObj = ({ postArray, putArray }) => {
-    for (let i = 0; i < postArray.length; i++) {
-        console.log("Posting " + postArray[i].name);
-        postReq(postArray[i]);
-    }
-    for (let i = 0; i < putArray.length; i++) {
-        console.log("Putting " + putArray[i].name);
-        putReq(putArray[i]);
-    }
+let parseIntoTrainerObj = (addArray) => {
+    addArray.forEach((a) => {
+        if (a.ans === "post") { addRequest(a, "post", "http://192.168.0.23:3000/api/trainers"); }
+        else if (a.ans === "put") { addRequest(a, "put", "http://192.168.0.23:3000/addWeek"); }
+
+    });
+
 };
 
-let postReq = (trainerObj) => {
+let trimObjOfProperty = (obj, prop) => {
+    delete obj[prop];
+    return obj;
+};
+
+let addRequest = (trainerObj, typeOfRequest, url) => {
+    console.log(`${typeOfRequest.toUpperCase()}ING ${trainerObj.name}`);
     let options = {
-        method: 'post',
-        body: trainerObj,
+        method: typeOfRequest,
+        body: trimObjOfProperty(trainerObj, "ans"),
         json: true,
-        url: 'http://192.168.0.23:3000/api/trainers'
+        url
     }
-    request(options, function (err, res, body) {
+    request(options, (err, res, body) => {
         if (err) {
-            console.error('error posting json: ', err)
-            throw err
+            console.error("error posting json: ", err);
+            throw err;
         }
-        var headers = res.headers
-        var statusCode = res.statusCode
-        //   console.log('headers: ', headers)
-        console.log('statusCode: ', statusCode)
-        //   console.log('body: ', body)
+        console.log("statusCode: ", res.statusCode);
     })
-};
-let putReq = (trainerObj) => {
-    let options = {
-        method: 'put',
-        body: trainerObj,
-        json: true,
-        url: 'http://192.168.0.23:3000/addWeek'
-    }
-    request(options, function (err, res, body) {
-        if (err) {
-            console.error('error posting json: ', err)
-            throw err
-        }
-        var headers = res.headers
-        var statusCode = res.statusCode
-        //   console.log('headers: ', headers)
-        console.log('statusCode: ', statusCode)
-        //   console.log('body: ', body)
-    })
-};
-
+    console.log(JSON.stringify(options.body, null, 2));
+}
