@@ -4,7 +4,7 @@
             <div class="Chart_list">
                 <div class="Chart">
                     <h2>Leaderboard</h2>
-                    <chart :chart-data="datacollection" :width="1125" :height="600" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 0.2 } }]} }" :label="labels">
+                    <chart :chart-data="datacollection" :width="1125" :height="600" :options="{responsive: false, maintainAspectRatio: false,  scales: { yAxes: [{  ticks: { beginAtZero: false, stepSize: 1 } }]} }" :label="labels">
                     </chart>
                 </div>
                 <div class="date">
@@ -65,11 +65,6 @@ export default {
             this.datacollection = {
                 labels: this.currentResults.names,
                 datasets: [
-                    // {
-                    //     label: 'TQI',
-                    //     backgroundColor: '#f87979',
-                    //     data: logic.getData(this.trainers, "tqi", this.getSelectedDate())
-                    // }, 
                     {
                         label: 'Average Knowledge Score',
                         backgroundColor: '#4169e1',
@@ -79,6 +74,11 @@ export default {
                         label: 'Average Reccomendation Score',
                         backgroundColor: '#fF7979',
                         data: this.currentResults.results.rScore
+                    },                    
+                    {
+                        label: 'Average TQI ',
+                        backgroundColor: '#000000',
+                        data: this.currentResults.results.tqi
                     }
                 ]
             }

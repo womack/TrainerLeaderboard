@@ -1,71 +1,43 @@
-
-
-// // //probably just used for tqi unless i rework the trainer object schema
-// let getData = (trainersObj, data = "tqi", date) => {
-//     let tqi, tqiObj = [];
-//     for (let i = 0; i < trainersObj.length; i++) {
-//         tqi = 0;
-//         for (var j = 0, count = 0; j < trainersObj[i].feedback.length; j++) {
-//             //if date has been passed as an arg, and the current week does not contian it, skip it.
-//             if (!!date && !trainersObj[i].feedback[j].date.includes(date)) {
-//                 continue;
-//             }
-//             tqi += (trainersObj[i].feedback[j][data]);
-//             count++;
-//         }
-//         tqiObj.push(tqi / count);
-//     }
-//     return tqiObj;
-// }
-
-// let getGraphLabels = (trainersObj) => {
-//     let labels = [];
-//     let trainerAveragesForThisMonth = getAverageScore(trainers)
-//     for (let i = 0; i < trainersObj.length; i++) {
-//         labels.push(trainersObj[i].name);
-//     }
-//     return labels;
-// }
 let getFeedback = (trainer) => {
     return trainer[0].feedback;
 };
 
 let getAverageScore = (trainersObj, date) => {
 
-    let trainersAverages = { names: [], results: { kScore: [], rScore: [] } };//[];
+    let trainersAverages = { names: [], results: { kScore: [], rScore: [], tqi: [] } };
+    trainersObj.forEach((currentTrainer) => {
+        let trainerCourseMonthAverageRScore = 0, trainerCourseMonthAverageKScore = 0, trainerCourseMonthAverageTQI = 0;
+        let rScoreCount = 0, kScoreCount = 0;
+        let filteredTrainerFeedback = currentTrainer.feedback;//JSON.parse(JSON.stringify(currentTrainer.feedback));//Object.assign([], currentTrainer.feedback);
 
-    //each trainer
-    for (let i = 0; i < trainersObj.length; i++) {
-        let rScoretrainerCourseAverages = 0, kScoretrainerCourseAverages = 0;
-        //each course/week
-        for (var j = 0, rScoreCount = 0, kScoreCount = 0; j < trainersObj[i].feedback.length; j++) {
-            //if date has been passed as an arg, and the current week does not contian it, skip it.
-            //turn this into a filter
-            if (date && !trainersObj[i].feedback[j].date.includes(date)) {
-                continue;
-            }
-            //kScore
-            let kScoreavgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, "kScore");
-            if (kScoreavgFromWeek !== -1) {
-                kScoretrainerCourseAverages += kScoreavgFromWeek;
+        //filter out results that arent of the current date, if passed.
+        if (date) {
+            filteredTrainerFeedback = filteredTrainerFeedback.filter((individualFeedback) => {
+                return individualFeedback.date.includes(date)
+            });
+        }
+        filteredTrainerFeedback.forEach((currentTrainerFeedback) => {
+            let kScoreAvgFromWeek = getAverageFromWeek(currentTrainerFeedback.results, "kScore");
+            if (kScoreAvgFromWeek !== -1) {
+                trainerCourseMonthAverageKScore += kScoreAvgFromWeek;
                 kScoreCount++;
             }
-            //rScore
-            let rScoreavgFromWeek = getAverageFromWeek(trainersObj[i].feedback[j].results, "rScore");
-            if (rScoreavgFromWeek !== -1) {
-                rScoretrainerCourseAverages += rScoreavgFromWeek;
+            let rScoreAvgFromWeek = getAverageFromWeek(currentTrainerFeedback.results, "rScore");
+            if (rScoreAvgFromWeek !== -1) {
+                trainerCourseMonthAverageRScore += rScoreAvgFromWeek;
                 rScoreCount++;
             }
-        }
+            trainerCourseMonthAverageTQI += TQIFromWeek(currentTrainerFeedback.results);
+        });
 
+        //If it actually found any data, add to graph usable object
         if (rScoreCount || kScoreCount) {
-            let kScoretrainerResult = kScoretrainerCourseAverages / kScoreCount;
-            let rScoretrainerResult = rScoretrainerCourseAverages / rScoreCount;
-            trainersAverages.names.push(trainersObj[i].name);
-            trainersAverages.results.kScore.push(kScoretrainerResult);
-            trainersAverages.results.rScore.push(rScoretrainerResult);
+            trainersAverages.names.push(currentTrainer.name);
+            trainersAverages.results.kScore.push(trainerCourseMonthAverageKScore / kScoreCount);
+            trainersAverages.results.rScore.push(trainerCourseMonthAverageRScore / rScoreCount);
+            trainersAverages.results.tqi.push((trainerCourseMonthAverageTQI / rScoreCount) / 10);
         }
-    }
+    });
     return trainersAverages;
 };
 
@@ -82,17 +54,21 @@ let getAverageFromWeek = (week, data) => {
     else { return -1; }
 };
 
-let determineTQI = (feedbacks) => {
-    feedbacks.map((a) => {
-        let detractors = 0, promoters = 0, neutral = 0;
-        a.results.forEach((element) => {
-            if (doesExist(element.rScore)) { return; }
-            else if (element.rScore > 8) { promoters++; }
-            else if (element.rScore < 7) { detractors++; }
-            else { neutral++; }
-        });
-        a.tqi = twoDecimalPlaces(((promoters - detractors) / (detractors + promoters + neutral)) * 100);
+let determineTQI = (feedback) => {
+    feedback.map((a) => {
+        a.tqi = TQIFromWeek(a.results);
     });
+};
+
+let TQIFromWeek = (week) => {
+    let detractors = 0, promoters = 0, neutral = 0;
+    week.forEach((element) => {
+        if (doesExist(element.rScore)) { return; }
+        else if (element.rScore > 8) { promoters++; }
+        else if (element.rScore < 7) { detractors++; }
+        else { neutral++; }
+    });
+    return twoDecimalPlaces(((promoters - detractors) / (detractors + promoters + neutral)) * 100);
 };
 
 let determineAverages = (feedbacks) => {
