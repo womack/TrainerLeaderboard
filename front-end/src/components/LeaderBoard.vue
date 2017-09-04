@@ -18,22 +18,45 @@
                             {{year}}
                         </option>
                     </select>
-                </div>
+                </div>                
             </div>
         </div>
+            <div class="ranking"> 
+        <div> <h3>Knowledge Score</h3>
+        <ol id="kScore">
+            <li v-for="trainer in kScoreRanking">
+            {{trainer.name}} - <b> {{trainer.score}}</b>
+            </li>
+        </ol>
+        </div>
+        <div> <h3>Recomendation Score</h3>
+        <ol id="rScore">
+            <li v-for="trainer in rScoreRanking">
+            {{trainer.name}} - <b> {{trainer.score}}</b>
+            </li>
+        </ol>
+        </div>
+        <div> <h3>TQI </h3>
+        <ol id="tqiScore">
+            <li v-for="trainer in tqiScoreRanking">
+            {{trainer.name}} - <b> {{trainer.score}}</b>
+            </li>
+        </ol>
+        </div>
+
+        </div>
     </div>
+   
 </template>
 
 <script>
 import Chart from "./Chart";
 import logic from "../logic/TrainerLogic";
-import Rankings from "./Rankings";
 const ip = require("../privates").ip;
 
 export default {
     components: {
-        Chart,
-        Rankings
+        Chart
     },
     data() {
         return {
@@ -56,11 +79,15 @@ export default {
             years: [2017, 2018, 2019, 2020, 2021, 2022],
             labels: [],
             trainers: [],
-            currentResults: {}
+            currentResults: {},
+                 tqiScoreRanking: [{name:"Jeff"}, {name:"Bob"}],
+      rScoreRanking : [{name:"Jeff"}, {name:"Bob"}],
+      kScoreRanking:[{name:"Jeff"}, {name:"Bob"}] 
         }
     },
     methods: {
         fillData() {
+            //Graph work
             this.currentResults = logic.getAverageScore(this.trainers, this.getSelectedDate());
             this.datacollection = {
                 labels: this.currentResults.names,
@@ -71,7 +98,7 @@ export default {
                         data: this.currentResults.results.kScore
                     },
                     {
-                        label: 'Average Reccomendation Score',
+                        label: 'Average Recomendation Score',
                         backgroundColor: '#fF7979',
                         data: this.currentResults.results.rScore
                     },                    
@@ -82,6 +109,12 @@ export default {
                     }
                 ]
             }
+            //Rankings work
+            this.tqiScoreRanking = logic.getRanking(this.currentResults,"tqi");
+            this.rScoreRanking = logic.getRanking(this.currentResults,"rScore");
+            
+            this.kScoreRanking = logic.getRanking(this.currentResults,"kScore");
+            
         },
         loadTrainers() {
             this.$http.get(`http://${ip}:3000/api/trainers`)

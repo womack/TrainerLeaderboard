@@ -1,9 +1,22 @@
+//Utility functions
+//Parse a number to two decimal places
+let twoDecimalPlaces = (val) => {
+    return parseInt(val.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+};
+
+//Check if a value exists
+let doesExist = (val) => {
+    if (val !== undefined || val !== null)
+        return false;
+    else
+        return true;
+};
+
 let getFeedback = (trainer) => {
     return trainer[0].feedback;
 };
 
 let getAverageScore = (trainersObj, date) => {
-
     let trainersAverages = { names: [], results: { kScore: [], rScore: [], tqi: [] } };
     trainersObj.forEach((currentTrainer) => {
         let trainerCourseMonthAverageRScore = 0, trainerCourseMonthAverageKScore = 0, trainerCourseMonthAverageTQI = 0;
@@ -41,25 +54,29 @@ let getAverageScore = (trainersObj, date) => {
     return trainersAverages;
 };
 
+//Determine the average of an attribute given a weeks data.
 let getAverageFromWeek = (week, data) => {
     let courseResultAverages = 0, count = 0;
     //each result
-    for (let i = 0; i < week.length; i++) {
-        if (week[i][data]) {
-            courseResultAverages += (week[i][data]);
+    week.forEach((result) => {
+        if (result[data]) {
+            courseResultAverages += (result[data]);
             count++;
         }
-    }
+    });
+    //Return the average score for that data for the week, or return -1 to signifiy there wasn't any data that week.
     if (count > 0) { return courseResultAverages / count; }
     else { return -1; }
 };
 
+//Given a feedback array, will add a tqi attribute to each objecet in that array.
 let determineTQI = (feedback) => {
     feedback.map((a) => {
         a.tqi = TQIFromWeek(a.results);
     });
 };
 
+//Return the TQI for a results array passed, to two decimals.
 let TQIFromWeek = (week) => {
     let detractors = 0, promoters = 0, neutral = 0;
     week.forEach((element) => {
@@ -78,21 +95,29 @@ let determineAverages = (feedbacks) => {
     });
 };
 
-let twoDecimalPlaces = (val) => {
-    return parseInt(val.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
-};
+let getRanking = (parsedResults, data) => {
 
-let doesExist = (val) => {
-    if (val !== undefined || val !== null)
-        return false;
-    else
-        return true;
-};
+    //Construct an array of objects with names/scores
+    let trainerStats = [];
+    for (let i = 0; i < parsedResults.names.length; i++) {
+        let tmpTrainer = {
+            name: parsedResults.names[i],
+            score: parsedResults.results[data][i].toFixed(2)
+        };
+        // tmpTrainer.score = twoDecimalPlaces(tmpTrainer.score);
+        trainerStats.push(tmpTrainer);
+    }
+    //Sort array by scores, descending
+    trainerStats.sort((a, b) => b.score - a.score);
+    return trainerStats;
+}
+
 
 module.exports = {
     getAverageScore,
     getAverageFromWeek,
     getFeedback,
     determineTQI,
-    determineAverages
+    determineAverages,
+    getRanking
 };

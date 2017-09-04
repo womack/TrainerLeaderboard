@@ -4,6 +4,22 @@ const fs = require("fs");
 const request = require("request");
 const readlineSync = require("readline-sync");
 
+
+//Utility Functions
+
+//delete a property from an object but return what it was, tidying objects but not losing the data.
+let deleteAndReturn = (data, property) => {
+    let tmp = data[property];
+    delete data[property];
+    return tmp;
+};
+
+//Delete a property off an object and then return it.
+let trimObjOfProperty = (obj, prop) => {
+    delete obj[prop];
+    return obj;
+};
+
 //Find files - format expects a dash then a date,
 // with either anonymous or feedback in the title.  - "./anonymous-feedback-comments-240717.csv";
 fs.readdir("./", (err, items) => {
@@ -26,25 +42,18 @@ let readCSV = (filesToDo) => {
             for (let key in jsonObj) {
                 if (jsonObj.hasOwnProperty(key)) {
                     //Deleted non-desired fields
-                    if (jsonObj[key].includes("#N/A") || key.includes("field") || (!key.includes("Perf") && !key.includes("Knowl") && !key.includes("Name") && !key.includes("Title") && !(key === "Ov"))) {
+                    if (jsonObj[key].includes("#N/A") || key.includes("field") || (!key.includes("Promoter") && !key.includes("Knowl") && !key.includes("Name") && !key.includes("Title") && !(key === "Ov"))) {
                         delete jsonObj[key];
                     }
                 }
             }
             jsonObj.date = date;
-            if (!jsonObj["Name"].includes("Project") && (jsonObj.hasOwnProperty("Knowl") || jsonObj.hasOwnProperty("Perf") || jsonObj.hasOwnProperty("Ov"))) { jsonData.push(jsonObj); }
+            if (!jsonObj["Name"].includes("Project") && (jsonObj.hasOwnProperty("Knowl") || jsonObj.hasOwnProperty("Promoter") || jsonObj.hasOwnProperty("Ov"))) { jsonData.push(jsonObj); }
         }).on("done", (error) => {
             if (error) { console.log(error); }
             cb(jsonData);
         });
-    })
-
-};
-//delete a property from an object but return what it was, tidying objects.
-let deleteAndReturn = (data, property) => {
-    let tmp = data[property];
-    delete data[property];
-    return tmp;
+    });
 };
 
 let parseTrainers = (jsonData) => {
@@ -61,11 +70,7 @@ let parseTrainers = (jsonData) => {
 };
 
 let parseFeedback = (trainerMap) => {
-    //trainer list
-    // let postArray = [];
-    // let putArray = [];
     let addArray = [];
-
     trainerMap.forEach((value, key, map) => {
         let feedbackArray = [];
         let feedbackObj = {
@@ -78,19 +83,17 @@ let parseFeedback = (trainerMap) => {
         value.forEach((b) => {
             let result = {
                 kScore: b.Knowl,
-                rScore: b.Perf,
+                rScore: b.Promoter,
                 cScore: b.Ov
             };
             feedbackObj.results.push(result);
         });
         feedbackArray.push(feedbackObj);
-
         console.log(value[0].date);
         let answer = readlineSync.question(`Are you posting or putting ${key}? `);
         if (answer.toLowerCase() === "post" || answer.toLowerCase() === "put") {
             addArray.push({ name: key, feedback: feedbackArray, ans: answer.toLowerCase() })
         }
-
     });
     parseIntoTrainerObj(addArray);
 };
@@ -99,14 +102,7 @@ let parseIntoTrainerObj = (addArray) => {
     addArray.forEach((a) => {
         if (a.ans === "post") { addRequest(a, "post", "http://192.168.0.23:3000/api/trainers"); }
         else if (a.ans === "put") { addRequest(a, "put", "http://192.168.0.23:3000/addWeek"); }
-
     });
-
-};
-
-let trimObjOfProperty = (obj, prop) => {
-    delete obj[prop];
-    return obj;
 };
 
 let addRequest = (trainerObj, typeOfRequest, url) => {
@@ -125,4 +121,4 @@ let addRequest = (trainerObj, typeOfRequest, url) => {
         console.log("statusCode: ", res.statusCode);
     })
     console.log(JSON.stringify(options.body, null, 2));
-}
+};
