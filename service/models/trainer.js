@@ -1,9 +1,9 @@
 //Dependencies
-let restful = require("node-restful");
-let mongoose = restful.mongoose;
+const restful = require("node-restful");
+const mongoose = restful.mongoose;
 
 //Schema
-let trainerSchema = new mongoose.Schema({
+const trainerSchema = new mongoose.Schema({
     name: String,
     feedback: [{
         title: String,

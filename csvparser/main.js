@@ -8,7 +8,6 @@ const readlineSync = require("readline-sync");
 // with either anonymous or feedback in the title.  - "./anonymous-feedback-comments-240717.csv";
 fs.readdir("./", (err, items) => {
     let filesToDo = [];
-    //
     items.forEach((a) => {
         if (a.toLowerCase().includes("anonymous") || a.toLowerCase().includes("feedback")) {
             let filePath = __dirname + "\\" + a;
@@ -18,16 +17,6 @@ fs.readdir("./", (err, items) => {
         }
     });
     readCSV(filesToDo);
-
-    // for (let i = 0; i < items.length; i++) {
-    //     if (items[i].toLowerCase().includes("anonymous") || items[i].toLowerCase().includes("feedback")) {
-    //         filePath = __dirname + "\\" + items[i];
-    //         date = filePath.substring(filePath.lastIndexOf("."), filePath.lastIndexOf("-") + 1);
-    //         debugger;
-    //         readCSV(filePath, parseTrainers);
-    //     }
-    // }
-
 });
 
 let readCSV = (filesToDo) => {
@@ -99,35 +88,27 @@ let parseFeedback = (trainerMap) => {
         console.log(value[0].date);
         let answer = readlineSync.question(`Are you posting or putting ${key}? `);
         if (answer.toLowerCase() === "post" || answer.toLowerCase() === "put") {
-            //      postArray.push({ name: key, feedback: feedbackArray });
             addArray.push({ name: key, feedback: feedbackArray, ans: answer.toLowerCase() })
         }
-        // else if (answer.toLowerCase() === "put") {
-        //     putArray.push({ name: key, feedback: feedbackObj });
-        // }
+
     });
-    // parseIntoTrainerObj({ postArray, putArray });
     parseIntoTrainerObj(addArray);
 };
 
-// let parseIntoTrainerObj = ({ postArray, putArray }) => {
 let parseIntoTrainerObj = (addArray) => {
     addArray.forEach((a) => {
         if (a.ans === "post") { addRequest(a, "post", "http://192.168.0.23:3000/api/trainers"); }
         else if (a.ans === "put") { addRequest(a, "put", "http://192.168.0.23:3000/addWeek"); }
 
     });
-    // postArray.forEach((a) => {
-    //     addRequest(a), "post", "http://192.168.0.23:3000/api/trainers";
-    // });
-    // putArray.forEach((a) => {
-    //     addRequest(a, "put", "http://192.168.0.23:3000/addWeek");
-    // });
+
 };
+
 let trimObjOfProperty = (obj, prop) => {
     delete obj[prop];
     return obj;
-}
+};
+
 let addRequest = (trainerObj, typeOfRequest, url) => {
     console.log(`${typeOfRequest.toUpperCase()}ING ${trainerObj.name}`);
     let options = {
